@@ -1,16 +1,23 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<main id="bekreftelse">
-    <h1>Takk for bestillingen!, {{ navn }}</h1>
+<main id="bekreftelse" class="receipt-page">
+    <section class="receipt" aria-labelledby="receipt-title">
+        <p class="receipt-brand">Kafe' Druze</p>
+        <h1 id="receipt-title">Booking receipt</h1>
 
-    <div class="bestilling-detaljer">
-        <p>Navn: {{ navn }}</p>
-        <p>Produkt: {{ produkt }}</p>
-        <p>Størrelse: {{ storrelse }}</p>
-        <p>Antall: {{ antall }}</p>
+        <div class="receipt-details">
+            <p><span>Guest</span><strong>{{ booking.first_name }} {{ booking.last_name }}</strong></p>
+            <p><span>Guests</span><strong>{{ booking.guests }}</strong></p>
+            <p><span>Date</span><strong>{{ booking.date }}</strong></p>
+            <p><span>Time</span><strong>{{ booking.time }}</strong></p>
+            <p><span>Phone</span><strong>{{ booking.phone }}</strong></p>
+            <p><span>Email</span><strong>{{ booking.email }}</strong></p>
+            {% if booking.comment %}
+                <p><span>Comment</span><strong>{{ booking.comment }}</strong></p>
+            {% endif %}
+        </div>
 
-        {% if kommentar %}
-            <p>Kommentar: {{ kommentar }}</p>
-        {% endif %}
-    </div>
+        <p class="receipt-thanks">Thank you!</p>
+        <a class="receipt-home" href="{{ url_for('index') }}">Return to home</a>
+    </section>
 </main>

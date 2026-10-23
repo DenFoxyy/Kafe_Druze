@@ -1,10 +1,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% set menu_pdf = "PDF's/Kafe' Druze Menu.pdf" %}
 
 <div class="home-hero">
 <header class="site-header">
     <nav class="site-navigation" aria-label="Main navigation">
         <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('bestilling') }}">Menu</a>
+        <a href="{{ url_for('static', filename=menu_pdf) }}">Menu</a>
         <a href="#about">About us</a>
     </nav>
 </header>

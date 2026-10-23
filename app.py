@@ -1,38 +1,47 @@
-from flask import Flask, render_template, request, redirect, url_for
+import re
+
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
+
 
 @app.route("/bestilling", methods=["GET", "POST"])
 def bestilling():
-
-    produkter = [
-        {"name": "Pizza", "image": "pizza.jpg"},
-        {"name": "Burger", "image": "burger.jpg"},
-        {"name": "Salat", "image": "salad.jpg"},
-        {"name": "Wrap", "image": "wrap.jpg"},
-    ]
-
     if request.method == "POST":
-        navn = request.form["navn"]
-        produkt = request.form["produkt"]
-        storrelse = request.form["storrelse"]
-        antall = request.form["antall"]
-        kommentar = request.form.get("kommentar", "")
+        phone = request.form["phone"].strip()
+        email = request.form["email"].strip()
+        phone_pattern = r"[0-9+() .-]*[0-9][0-9+() .-]*"
+        email_pattern = r"[^@\s]+@[^@\s]+\.[^@\s]+"
+
+        if not re.fullmatch(phone_pattern, phone) or not re.fullmatch(email_pattern, email):
+            return render_template(
+                "bestilling.html",
+                validation_error="Enter a valid phone number and email address.",
+            ), 400
+
+        booking = {
+            "first_name": request.form["first_name"],
+            "last_name": request.form["last_name"],
+            "phone": phone,
+            "email": email,
+            "guests": request.form["guests"],
+            "date": request.form["date"],
+            "time": request.form["time"],
+            "comment": request.form.get("comment", ""),
+        }
 
         return render_template(
             "bekreftelse.html",
-            navn=navn,
-            produkt=produkt,
-            storrelse=storrelse,
-            antall=antall,
-            kommentar=kommentar
+            booking=booking,
         )
 
-    return render_template("bestilling.html", produkter=produkter)
+    return render_template("bestilling.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
