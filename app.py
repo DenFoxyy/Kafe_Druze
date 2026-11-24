@@ -4,9 +4,9 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from db_config import save_booking, get_all_bookings, init_database
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here-change-in-production'  # Change this in production!
+app.secret_key = 'your-secret-key-here-change-in-production' 
 
-# Initialize database on startup
+
 try:
     init_database()
     print("Database connection successful!")
