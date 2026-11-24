@@ -545,9 +545,29 @@ textarea {
   cursor: pointer;
 }
 
+.cancel-button {
+  position: fixed;
+  background: #8d271b;
+  border-color: #8d271b;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 0 18px;
+  text-decoration: none;
+}
+
 .book-button:hover,
 .book-button:focus-visible {
   filter: brightness(1.1);
+}
+
+.cancel-button:focus-visible {
+  outline: 3px solid #222;
+  outline-offset: 3px;
 }
 
 .reservation-form[hidden] {

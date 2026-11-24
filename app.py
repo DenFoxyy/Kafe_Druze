@@ -1,8 +1,17 @@
 import re
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
+from db_config import save_booking, get_all_bookings, init_database
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key-here-change-in-production'  # Change this in production!
+
+# Initialize database on startup
+try:
+    init_database()
+    print("Database connection successful!")
+except Exception as e:
+    print(f"Database connection failed: {e}")
 
 
 @app.route("/")
@@ -35,12 +44,34 @@ def bestilling():
             "comment": request.form.get("comment", ""),
         }
 
+        
+        try:
+            booking_id = save_booking(booking)
+            booking['id'] = booking_id
+            flash("Bestilling lagret!", "success")
+        except Exception as e:
+            print(f"Error saving booking: {e}")
+            flash("Det oppstod en feil ved lagring av bestillingen.", "error")
+            return render_template("bestilling.html", validation_error="Database error occurred"), 500
+
         return render_template(
             "bekreftelse.html",
             booking=booking,
         )
 
     return render_template("bestilling.html")
+
+
+@app.route("/admin/bookings")
+def admin_bookings():
+    """Admin page to view all bookings."""
+    try:
+        bookings = get_all_bookings()
+        return render_template("admin_bookings.html", bookings=bookings)
+    except Exception as e:
+        print(f"Error retrieving bookings: {e}")
+        flash("Kunne ikke hente bestillinger.", "error")
+        return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
